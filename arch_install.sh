@@ -1,7 +1,7 @@
 # == MY ARCH SETUP INSTALLER == #
 #part1
 printf '\033c'
-echo "Welcome to bugswriter's arch installer script"
+echo "Welcome to ydnawizard's arch installer script"
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 pacman --noconfirm -Sy archlinux-keyring
 loadkeys us
@@ -31,7 +31,7 @@ exit
 printf '\033c'
 pacman -S --noconfirm sed
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
-ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
+ln -sf /usr/share/zoneinfo/US/Central /etc/localtime
 hwclock --systohc
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
@@ -56,16 +56,16 @@ sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
-     noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono ttf-joypixels ttf-font-awesome \
+     ttf-profont-nerd ttf-joypixels ttf-font-awesome \
      sxiv mpv zathura zathura-pdf-mupdf ffmpeg imagemagick  \
-     fzf man-db xwallpaper python-pywal unclutter xclip maim \
-     zip unzip unrar p7zip xdotool papirus-icon-theme brightnessctl  \
+     fzf man-db xwallpaper python-pywal xclip maim \
+     zip unzip unrar p7zip xdotool papirus-icon-theme brightnessctl\
      dosfstools ntfs-3g git sxhkd zsh pipewire pipewire-pulse \
-     emacs-nox arc-gtk-theme rsync qutebrowser dash \
-     xcompmgr libnotify dunst slock jq aria2 cowsay \
-     dhcpcd connman wpa_supplicant rsync pamixer mpd ncmpcpp \
+     neovim rsync firefox xbindkeys connman\
+     xcompmgr libnotify dunst slock aria2 cowsay \
+     rsync pamixer mpd ncmpcpp\
      zsh-syntax-highlighting xdg-user-dirs libconfig \
-     bluez bluez-utils
+     newsboat picom
 
 systemctl enable connman.service 
 rm /bin/sh
@@ -86,19 +86,19 @@ exit
 #part3
 printf '\033c'
 cd $HOME
-git clone --separate-git-dir=$HOME/.dotfiles https://github.com/bugswriter/dotfiles.git tmpdotfiles
+git clone --separate-git-dir=$HOME/.dotfiles https://github.com/ydnawizard/dotfiles.git tmpdotfiles
 rsync --recursive --verbose --exclude '.git' tmpdotfiles/ $HOME/
 rm -r tmpdotfiles
 # dwm: Window Manager
-git clone --depth=1 https://github.com/Bugswriter/dwm.git ~/.local/src/dwm
+git clone --depth=1 https://github.com/ydnawizard/dwm.git ~/.local/src/dwm
 sudo make -C ~/.local/src/dwm install
 
 # st: Terminal
-git clone --depth=1 https://github.com/Bugswriter/st.git ~/.local/src/st
+git clone --depth=1 https://github.com/ydnawizard/st.git ~/.local/src/st
 sudo make -C ~/.local/src/st install
 
 # dmenu: Program Menu
-git clone --depth=1 https://github.com/Bugswriter/dmenu.git ~/.local/src/dmenu
+git clone --depth=1 https://github.com/ydnawizard/dmenu.git ~/.local/src/dmenu
 sudo make -C ~/.local/src/dmenu install
 
 # dmenu: Dmenu based Password Prompt
@@ -106,16 +106,17 @@ git clone --depth=1 https://github.com/ritze/pinentry-dmenu.git ~/.local/src/pin
 sudo make -C ~/.local/src/pinentry-dmenu clean install
 
 # dwmblocks: Status bar for dwm
-git clone --depth=1 https://github.com/bugswriter/dwmblocks.git ~/.local/src/dwmblocks
+git clone --depth=1 https://github.com/ydnawizard/dwmblocks.git ~/.local/src/dwmblocks
 sudo make -C ~/.local/src/dwmblocks install
 
 # pikaur: AUR helper
-git clone https://aur.archlinux.org/pikaur.git
-cd pikaur
+git clone https://aur.archlinux.org/yay
+cd yay
 makepkg -fsri
 cd
-pikaur -S libxft-bgra-git yt-dlp-drop-in
-mkdir dl dox imp music pix pub code
+yay libxft-bgra-git 
+yay yt-dlp-drop-in
+mkdir dl dox music pix vidz pub code
 
 ln -s ~/.config/x11/xinitrc .xinitrc
 ln -s ~/.config/shell/profile .zprofile
